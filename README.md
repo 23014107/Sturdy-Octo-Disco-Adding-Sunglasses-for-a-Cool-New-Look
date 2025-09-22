@@ -79,14 +79,15 @@ plt.title('Sunglass Mask (generated)')
 
 
 
+
 ```
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
 #Load images
-faceImage = cv2.imread('/content/Screenshot 2025-09-22 215135.png')
-glassJPG = cv2.imread('/content/Screenshot 2025-09-22 212725.png')
+faceImage = cv2.imread('/content/Screenshot 2025-09-11 114206.png')
+glassJPG = cv2.imread('/content/images.jpg')
 
 #Check if images loaded correctly
 if faceImage is None or glassJPG is None:
@@ -124,94 +125,7 @@ else:
     plt.axis("off")
     plt.show()
 ```
+<img width="613" height="756" alt="image" src="https://github.com/user-attachments/assets/54dace39-8d89-4a2c-abd4-670818ce3e04" />
 
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-
-#Load images
-faceImage = cv2.imread('/content/Screenshot 2025-09-22 215135.png')
-glassJPG = cv2.imread('/content/Screenshot 2025-09-22 212725.png')
-
-#Check if images loaded correctly
-if faceImage is None or glassJPG is None:
-    print("Error: Check your file paths!")
-else:
-    face_h, face_w, _ = faceImage.shape
-
-    #Resize glasses to ~50% of face width
-    new_w = int(face_w * 0.5)
-    new_h = int(new_w * glassJPG.shape[0] / glassJPG.shape[1])
-    glass_resized = cv2.resize(glassJPG, (new_w, new_h))
-
-    #Create mask
-    glass_gray = cv2.cvtColor(glass_resized, cv2.COLOR_BGR2GRAY)
-    _, mask = cv2.threshold(glass_gray, 240, 255, cv2.THRESH_BINARY_INV)
-    mask_inv = cv2.bitwise_not(mask)
-
-    # Adjusted position to place glasses on eyes
-    x = int(face_w * 0.27)   # x offset (centered)
-    y = int(face_h * 0.09)   # y offset (move up from nose to eyes)
-
-    #ROI on face
-    roi = faceImage[y:y+new_h, x:x+new_w]
-
-    if roi.shape[0] > 0 and roi.shape[1] > 0:
-        bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
-        fg = cv2.bitwise_and(glass_resized, glass_resized, mask=mask)
-        combined = cv2.add(bg, fg)
-        faceImage[y:y+new_h, x:x+new_w] = combined
-
-    #Show result
-    plt.figure(figsize=[10,10])
-    plt.imshow(cv2.cvtColor(faceImage, cv2.COLOR_BGR2RGB))
-    plt.title("Face with Sunglasses")
-    plt.axis("off")
-    plt.show()
-
-    import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-
-#Load images
-faceImage = cv2.imread('/content/Screenshot 2025-09-22 215135.png')
-glassJPG = cv2.imread('/content/Screenshot 2025-09-22 212725.png')
-
-#Check if images loaded correctly
-if faceImage is None or glassJPG is None:
-    print("Error: Check your file paths!")
-else:
-    face_h, face_w, _ = faceImage.shape
-
-    #Resize glasses to ~50% of face width
-    new_w = int(face_w * 0.5)
-    new_h = int(new_w * glassJPG.shape[0] / glassJPG.shape[1])
-    glass_resized = cv2.resize(glassJPG, (new_w, new_h))
-
-    #Create mask
-    glass_gray = cv2.cvtColor(glass_resized, cv2.COLOR_BGR2GRAY)
-    _, mask = cv2.threshold(glass_gray, 240, 255, cv2.THRESH_BINARY_INV)
-    mask_inv = cv2.bitwise_not(mask)
-
-    # Adjusted position to place glasses on eyes
-    x = int(face_w * 0.27)   # x offset (centered)
-    y = int(face_h * 0.09)   # y offset (move up from nose to eyes)
-
-    #ROI on face
-    roi = faceImage[y:y+new_h, x:x+new_w]
-
-    if roi.shape[0] > 0 and roi.shape[1] > 0:
-        bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
-        fg = cv2.bitwise_and(glass_resized, glass_resized, mask=mask)
-        combined = cv2.add(bg, fg)
-        faceImage[y:y+new_h, x:x+new_w] = combined
-
-    #Show result
-    plt.figure(figsize=[10,10])
-    plt.imshow(cv2.cvtColor(faceImage, cv2.COLOR_BGR2RGB))
-    plt.title("Face with Sunglasses")
-    plt.axis("off")
-    plt.show()
-    <img width="613" height="756" alt="image" src="https://github.com/user-attachments/assets/b2246339-910f-4aca-b526-963089eef0bf" />
 
 
